@@ -133,6 +133,3 @@ def initialize_schema() -> None:
 
     connection.commit()
     connection.close()
-
-
-initialize_schema()
