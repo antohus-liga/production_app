@@ -23,12 +23,20 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS suppliers(
-            sup_id TEXT PRIMARY KEY,
-            name TEXT,
+            sup_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sup_code TEXT UNIQUE NOT NULL,
+            sup_type TEXT,
+            first_name TEXT,
+            last_name TEXT,
+            company_name TEXT,
             country TEXT,
             city TEXT,
             phone TEXT,
-            email TEXT
+            email TEXT,
+            date_of_birth DATE,
+            nif INT,
+            created_at TEXT,
+            updated_at TEXT
         );
         """
     )
@@ -36,12 +44,20 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS clients(
-            cli_id TEXT PRIMARY KEY,
-            name TEXT,
+            cli_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cli_code TEXT UNIQUE NOT NULL,
+            cli_type TEXT,
+            first_name TEXT,
+            last_name TEXT,
+            company_name TEXT,
             country TEXT,
             city TEXT,
             phone TEXT,
-            email TEXT
+            email TEXT,
+            date_of_birth DATE,
+            nif INT,
+            created_at TEXT,
+            updated_at TEXT
         );
         """
     )
@@ -50,11 +66,16 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS materials(
-            mat_id TEXT PRIMARY KEY,
+            mat_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            mat_code TEXT UNIQUE NOT NULL,
             name TEXT,
             category TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
-            unit_price FLOAT
+            base_unit TEXT,
+            unit_price FLOAT NOT NULL DEFAULT 0,
+            status TEXT NOT NULL DEFAULT "active",
+            created_at TEXT,
+            updated_at TEXT
         );
         """
     )
@@ -64,12 +85,16 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS products(
-            pro_id TEXT PRIMARY KEY,
+            pro_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pro_code TEXT UNIQUE NOT NULL,
             name TEXT,
             category TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
-            unit_price FLOAT,
-            production_cost FLOAT
+            base_unit TEXT,
+            unit_price FLOAT NOT NULL DEFAULT 0,
+            production_cost FLOAT,
+            created_at TEXT,
+            updated_at TEXT
         );
         """
     )
@@ -83,7 +108,8 @@ def initialize_schema() -> None:
             sup_id TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_price FLOAT,
-            created_at TEXT DEFAULT (datetime('now', 'localtime')),
+            created_at TEXT,
+            updated_at TEXT,
             FOREIGN KEY(mat_id) REFERENCES materials(mat_id),
             FOREIGN KEY(sup_id) REFERENCES supliers(sup_id)
         );
@@ -99,7 +125,8 @@ def initialize_schema() -> None:
             cli_id TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_price FLOAT,
-            created_at TEXT DEFAULT (datetime('now', 'localtime')),
+            created_at TEXT,
+            updated_at TEXT,
             FOREIGN KEY(pro_id) REFERENCES materials(pro_id),
             FOREIGN KEY(cli_id) REFERENCES supliers(cli_id)
         );
@@ -126,6 +153,8 @@ def initialize_schema() -> None:
             pro_id TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_cost FLOAT,
+            created_at TEXT,
+            updated_at TEXT,
             FOREIGN KEY(pro_id) REFERENCES materials(pro_id)
         );
         """
