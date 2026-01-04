@@ -1,4 +1,6 @@
 from PySide6.QtWidgets import (
+    QComboBox,
+    QDateEdit,
     QTableWidget,
     QWidget,
     QPushButton,
@@ -16,7 +18,9 @@ class TableWidget(QWidget):
         super().__init__()
 
         self.table_name = table_name
-        self.column_names = self.get_column_names()
+
+        self.column_info = self.get_column_names()
+        self.column_names = list(self.column_info.keys())
 
         self.table = QTableWidget()
         self.table.setColumnCount(len(self.column_names))
@@ -25,14 +29,27 @@ class TableWidget(QWidget):
         self.add_btn = QPushButton("Add")
         self.add_btn.clicked.connect(self.insert_values)
 
-        self.inputs: list[tuple[QLabel, QLineEdit]] = [
-            (QLabel(col_name), QLineEdit()) for col_name in self.column_names
-        ]
+        self.inputs: list[tuple[QLabel, QLineEdit | QComboBox | QDateEdit]] = []
+        for col_name in self.column_names:
+            input_widget = QLineEdit()
+            match self.column_info[col_name]:
+                case "le":
+                    input_widget = QLineEdit()
+                case "cb":
+                    input_widget = QComboBox()
+                    input_widget.addItem("test")
+                case "de":
+                    input_widget = QDateEdit()
+                    input_widget.setCalendarPopup(True)
+                    input_widget.setDisplayFormat("dd/MM/yyyy")
+                case "df":
+                    continue
+            self.inputs.append((QLabel(col_name), input_widget))
 
         self.master_layout = QVBoxLayout()
-        for label, line_edit in self.inputs:
+        for label, input_widget in self.inputs:
             self.master_layout.addWidget(label)
-            self.master_layout.addWidget(line_edit)
+            self.master_layout.addWidget(input_widget)
         self.master_layout.addWidget(self.add_btn)
         self.master_layout.addWidget(self.table)
 
@@ -49,27 +66,66 @@ class TableWidget(QWidget):
         while query.next():
             self.table.insertRow(row)
             for col in range(query.record().count()):
-                self.table.setItem(row, col, QTableWidgetItem(query.value(col)))
+                self.table.setItem(row, col, QTableWidgetItem(str(query.value(col))))
 
             row += 1
 
     def insert_values(self):
         query = QSqlQuery()
-        query.prepare(f"INSERT INTO {self.table_name} VALUES(?, ?, ?, ?, ?, ?)")
-        for _, line_edit in self.inputs:
-            value = line_edit.text()
+        query.prepare(
+            """
+            INSERT INTO clients (
+                cli_code, cli_type, first_name, last_name, company_name,
+                country, city, phone, email, date_of_birth, nif, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, STRFTIME('%d/%m/%Y', 'now', 'localtime'), STRFTIME('%d/%m/%Y', 'now', 'localtime'))
+        """
+        )
+        for _, input_field in self.inputs:
+            value = ""
+            if isinstance(input_field, QLineEdit):
+                value = input_field.text()
+            elif isinstance(input_field, QComboBox):
+                value = input_field.currentText()
+            elif isinstance(input_field, QDateEdit):
+                value = input_field.date().toString("dd/MM/yyyy")
+            else:
+                value = ""
+
             if value != "":
                 query.addBindValue(value)
             else:
                 QMessageBox.warning(
                     self,
-                    "All values must not be NULL",
+                    "NULL value not expected",
                     "Make sure every field is filled",
                 )
+                query.clear()
                 return
-        query.exec()
+        if not query.exec():
+            print(query.lastError().text())
         self.load_table()
 
+    # df - defaulted
+    # le - line edit
+    # cb - combo box
+    # de - date edit
     def get_column_names(self):
-        map = {"clients": ["Code", "Name", "City", "Country", "Phone", "Email"]}
+        map = {
+            "clients": {
+                "ID": "df",
+                "Code": "le",
+                "Type": "cb",
+                "First Name": "le",
+                "Last Name": "le",
+                "Company Name": "le",
+                "Country": "le",
+                "City": "le",
+                "Phone": "le",
+                "Email": "le",
+                "Date of Birth": "de",
+                "NIF": "le",
+                "Created at": "df",
+                "Updated at": "df",
+            }
+        }
         return map[self.table_name]
