@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import (
     QComboBox,
     QDateEdit,
+    QGridLayout,
+    QHBoxLayout,
     QTableWidget,
     QWidget,
     QPushButton,
@@ -44,12 +46,33 @@ class TableWidget(QWidget):
                     input_widget.setDisplayFormat("dd/MM/yyyy")
                 case "df":
                     continue
+
             self.inputs.append((QLabel(col_name), input_widget))
 
         self.master_layout = QVBoxLayout()
-        for label, input_widget in self.inputs:
-            self.master_layout.addWidget(label)
-            self.master_layout.addWidget(input_widget)
+
+        self.grid = QGridLayout()
+        row = 0
+        col = 0
+        for i in range(len(self.inputs)):
+            widget = QWidget()
+
+            h_layout = QHBoxLayout()
+            h_layout.addWidget(self.inputs[i][0])
+            h_layout.addWidget(self.inputs[i][1])
+            h_layout.setStretch(0, 1)
+            h_layout.setStretch(1, 3)
+
+            widget.setLayout(h_layout)
+            self.grid.addWidget(widget, row, col)
+
+            col += 1
+
+            if col >= 3:
+                col = 0
+                row += 1
+
+        self.master_layout.addLayout(self.grid)
         self.master_layout.addWidget(self.add_btn)
         self.master_layout.addWidget(self.table)
 
@@ -77,7 +100,11 @@ class TableWidget(QWidget):
             INSERT INTO clients (
                 cli_code, cli_type, first_name, last_name, company_name,
                 country, city, phone, email, date_of_birth, nif, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, STRFTIME('%d/%m/%Y', 'now', 'localtime'), STRFTIME('%d/%m/%Y', 'now', 'localtime'))
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                STRFTIME('%d/%m/%Y', 'now', 'localtime')
+            )
         """
         )
         for _, input_field in self.inputs:
