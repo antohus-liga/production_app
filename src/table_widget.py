@@ -4,6 +4,8 @@ from PySide6.QtSql import QSqlQuery
 
 class TableWidget(QTableWidget):
     def __init__(self, table_name, column_names):
+        super().__init__()
+
         self.TABLE_NAME = table_name
         self.COLUMN_NAMES = column_names
 
