@@ -19,20 +19,20 @@ class TableWidget(QWidget):
     def __init__(self, table_name):
         super().__init__()
 
-        self.table_name = table_name
+        self.TABLE_NAME = table_name
 
         self.column_info = self.get_column_names()
-        self.column_names = list(self.column_info.keys())
+        self.COLUMN_NAMES = list(self.column_info.keys())
 
         self.table = QTableWidget()
-        self.table.setColumnCount(len(self.column_names))
-        self.table.setHorizontalHeaderLabels(self.column_names)
+        self.table.setColumnCount(len(self.COLUMN_NAMES))
+        self.table.setHorizontalHeaderLabels(self.COLUMN_NAMES)
 
         self.add_btn = QPushButton("Add")
         self.add_btn.clicked.connect(self.insert_values)
 
         self.inputs: list[tuple[QLabel, QLineEdit | QComboBox | QDateEdit]] = []
-        for col_name in self.column_names:
+        for col_name in self.COLUMN_NAMES:
             input_widget = QLineEdit()
             match self.column_info[col_name]:
                 case "le":
@@ -84,7 +84,7 @@ class TableWidget(QWidget):
         self.table.setRowCount(0)
 
         query = QSqlQuery()
-        query.exec(f"SELECT * FROM {self.table_name}")
+        query.exec(f"SELECT * FROM {self.TABLE_NAME}")
         row = 0
         while query.next():
             self.table.insertRow(row)
@@ -222,4 +222,4 @@ class TableWidget(QWidget):
                 "Updated at": "df",
             },
         }
-        return map[self.table_name]
+        return map[self.TABLE_NAME]
