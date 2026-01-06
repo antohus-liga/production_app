@@ -6,6 +6,6 @@ import sys
 
 app = QApplication(sys.argv)
 get_connection()
-clients_widget = DisplayWidget("clients")
+clients_widget = DisplayWidget("movements_out")
 clients_widget.show()
 app.exec()

@@ -78,19 +78,8 @@ class DisplayWidget(QWidget):
         self.table.load_table()
 
     def insert_values(self):
-        query = QSqlQuery()
-        query.prepare(
-            """
-            INSERT INTO clients (
-                cli_code, cli_type, first_name, last_name, company_name,
-                country, city, phone, email, date_of_birth, nif, created_at, updated_at
-            ) VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-                STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                STRFTIME('%d/%m/%Y', 'now', 'localtime')
-            )
-        """
-        )
+        query = self.prepare_insertion_query()
+
         for _, input_field in self.inputs:
             value = ""
             if isinstance(input_field, QLineEdit):
@@ -174,24 +163,23 @@ class DisplayWidget(QWidget):
                 "Quantity": "df",
                 "Base unit": "cb",
                 "Unit price": "le",
-                "Status": "cb",
                 "Production cost": "df",
                 "Created at": "df",
                 "Updated at": "df",
             },
             "movements_in": {
                 "Number": "df",
-                "Material": "le",
-                "Supplier": "le",
+                "Material": "cb",
+                "Supplier": "cb",
                 "Quantity": "le",
-                "Total price": "le",
+                "Total price": "df",
                 "Created at": "df",
                 "Updated at": "df",
             },
             "movements_out": {
                 "Number": "df",
-                "Material": "le",
-                "Supplier": "le",
+                "Product": "cb",
+                "Supplier": "cb",
                 "Quantity": "le",
                 "Total price": "df",
                 "Created at": "df",
@@ -199,7 +187,7 @@ class DisplayWidget(QWidget):
             },
             "production_line": {
                 "Number": "df",
-                "Product": "le",
+                "Product": "cb",
                 "Quantity": "le",
                 "Total cost": "df",
                 "Created at": "df",
@@ -207,3 +195,86 @@ class DisplayWidget(QWidget):
             },
         }
         return map[self.TABLE_NAME]
+
+    def prepare_insertion_query(self) -> QSqlQuery:
+        query = QSqlQuery()
+        match self.TABLE_NAME:
+            case "clients":
+                query.prepare(
+                    """
+                    INSERT INTO clients (
+                        cli_code, cli_type, first_name, last_name, company_name,
+                        country, city, phone, email, date_of_birth, nif, created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "suppliers":
+                query.prepare(
+                    """
+                    INSERT INTO suppliers (
+                        sup_code, sup_type, first_name, last_name, company_name,
+                        country, city, phone, email, date_of_birth, nif, created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "materials":
+                query.prepare(
+                    """
+                    INSERT INTO materials (
+                        mat_code, name, category, base_unit, unit_price, 
+                        status, created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?, ?, ?, ?,
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "products":
+                query.prepare(
+                    """
+                    INSERT INTO products (
+                        pro_code, name, category, base_unit,
+                        unit_price, created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?, ?, ?,
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "movements_in":
+                query.prepare(
+                    """
+                    INSERT INTO movements_in (
+                        mat_id, sup_id, quantity,
+                        created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?,
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "movements_out":
+                query.prepare(
+                    """
+                    INSERT INTO movements_out (
+                        pro_id, cli_id, quantity,
+                        created_at, updated_at
+                    ) VALUES (
+                        ?, ?, ?,
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+        return query
