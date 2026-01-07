@@ -3,14 +3,13 @@ from PySide6.QtSql import QSqlQuery
 
 
 class TableWidget(QTableWidget):
-    def __init__(self, table_name, column_names):
+    def __init__(self, master):
         super().__init__()
 
-        self.TABLE_NAME = table_name
-        self.COLUMN_NAMES = column_names
+        self.master = master
 
-        self.setColumnCount(len(self.COLUMN_NAMES))
-        self.setHorizontalHeaderLabels(self.COLUMN_NAMES)
+        self.setColumnCount(len(self.master.COLUMN_NAMES))
+        self.setHorizontalHeaderLabels(self.master.COLUMN_NAMES)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
@@ -20,7 +19,7 @@ class TableWidget(QTableWidget):
         self.setRowCount(0)
 
         query = QSqlQuery()
-        query.exec(f"SELECT * FROM {self.TABLE_NAME}")
+        query.exec(f"SELECT * FROM {self.master.TABLE_NAME}")
         row = 0
         while query.next():
             self.insertRow(row)

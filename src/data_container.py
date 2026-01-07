@@ -9,15 +9,16 @@ from PySide6.QtWidgets import (
 
 
 class DataContainer(QWidget):
-    def __init__(self, parent, data):
+    def __init__(self, master, data):
         super().__init__()
+        self.master = master
 
         self.data = data
         self.master_layout = QVBoxLayout()
         self.header_layout = QHBoxLayout()
         self.grid_layout = QGridLayout()
 
-        if parent.TABLE_NAME in ("suppliers", "clients"):
+        if self.master.TABLE_NAME in ("suppliers", "clients"):
             self.code = QLabel(f"#{data[1]}")
             self.code.setStyleSheet(
                 """

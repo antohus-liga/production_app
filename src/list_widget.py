@@ -4,10 +4,10 @@ from data_container import DataContainer
 
 
 class ListWidget(QListWidget):
-    def __init__(self, table_name):
+    def __init__(self, master):
         super().__init__()
-
-        self.TABLE_NAME = table_name
+        self.master = master
+        self.TABLE_NAME = self.master.TABLE_NAME
 
         self.load_data()
 
