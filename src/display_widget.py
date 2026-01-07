@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 from PySide6.QtSql import QSqlQuery
+from list_widget import ListWidget
 from table_widget import TableWidget
 
 
@@ -24,6 +25,7 @@ class DisplayWidget(QWidget):
         self.COLUMN_NAMES = list(self.column_info.keys())
 
         self.table = TableWidget(self.TABLE_NAME, self.COLUMN_NAMES)
+        self.list = ListWidget(self.TABLE_NAME)
 
         self.add_btn = QPushButton("Add")
         self.add_btn.clicked.connect(self.insert_values)
@@ -71,7 +73,9 @@ class DisplayWidget(QWidget):
 
         self.master_layout.addLayout(self.grid)
         self.master_layout.addWidget(self.add_btn)
+
         self.master_layout.addWidget(self.table)
+        self.master_layout.addWidget(self.list)
 
         self.setLayout(self.master_layout)
 
@@ -104,6 +108,7 @@ class DisplayWidget(QWidget):
         if not query.exec():
             print(query.lastError().text())
         self.table.load_table()
+        self.list.load_data()
 
     # df - defaulted
     # le - line edit
@@ -114,9 +119,9 @@ class DisplayWidget(QWidget):
             "clients": {
                 "ID": "df",
                 "Code": "le",
-                "Type": "cb",
                 "First Name": "le",
                 "Last Name": "le",
+                "Type": "cb",
                 "Company Name": "le",
                 "Country": "le",
                 "City": "le",
@@ -130,9 +135,9 @@ class DisplayWidget(QWidget):
             "suppliers": {
                 "ID": "df",
                 "Code": "le",
-                "Type": "cb",
                 "First Name": "le",
                 "Last Name": "le",
+                "Type": "cb",
                 "Company Name": "le",
                 "Country": "le",
                 "City": "le",
@@ -203,7 +208,7 @@ class DisplayWidget(QWidget):
                 query.prepare(
                     """
                     INSERT INTO clients (
-                        cli_code, cli_type, first_name, last_name, company_name,
+                        cli_code, first_name, last_name, cli_type, company_name,
                         country, city, phone, email, date_of_birth, nif, created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
@@ -216,7 +221,7 @@ class DisplayWidget(QWidget):
                 query.prepare(
                     """
                     INSERT INTO suppliers (
-                        sup_code, sup_type, first_name, last_name, company_name,
+                        sup_code, first_name, last_name, sup_type, company_name,
                         country, city, phone, email, date_of_birth, nif, created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 

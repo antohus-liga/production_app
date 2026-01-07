@@ -25,9 +25,9 @@ def initialize_schema() -> None:
         CREATE TABLE IF NOT EXISTS suppliers(
             sup_id INTEGER PRIMARY KEY AUTOINCREMENT,
             sup_code TEXT UNIQUE NOT NULL,
-            sup_type TEXT,
             first_name TEXT,
             last_name TEXT,
+            sup_type TEXT,
             company_name TEXT,
             country TEXT,
             city TEXT,
@@ -46,9 +46,9 @@ def initialize_schema() -> None:
         CREATE TABLE IF NOT EXISTS clients(
             cli_id INTEGER PRIMARY KEY AUTOINCREMENT,
             cli_code TEXT UNIQUE NOT NULL,
-            cli_type TEXT,
             first_name TEXT,
             last_name TEXT,
+            cli_type TEXT,
             company_name TEXT,
             country TEXT,
             city TEXT,

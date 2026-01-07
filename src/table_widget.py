@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QHeaderView, QTableWidget, QTableWidgetItem
 from PySide6.QtSql import QSqlQuery
 
 
@@ -11,6 +11,10 @@ class TableWidget(QTableWidget):
 
         self.setColumnCount(len(self.COLUMN_NAMES))
         self.setHorizontalHeaderLabels(self.COLUMN_NAMES)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.horizontalHeader().setSectionsClickable(True)
+        self.verticalHeader().setVisible(False)
+        self.setAlternatingRowColors(True)
 
     def load_table(self):
         self.setRowCount(0)
