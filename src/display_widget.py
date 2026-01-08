@@ -1,7 +1,9 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
 )
 from inputs_container import InputsContainer
 from list_widget import ListWidget
@@ -24,13 +26,29 @@ class DisplayWidget(QWidget):
         self.add_btn = QPushButton("Add")
         self.add_btn.clicked.connect(self.insert_values)
 
-        self.master_layout = QVBoxLayout()
+        self.switch_to_list = QPushButton("List view")
+        self.switch_to_list.clicked.connect(self.toggle_view)
+        self.switch_to_list.setFixedWidth(100)
 
+        self.switch_to_table = QPushButton("Table view")
+        self.switch_to_table.setDisabled(True)
+        self.switch_to_table.clicked.connect(self.toggle_view)
+        self.switch_to_table.setFixedWidth(100)
+
+        self.master_layout = QVBoxLayout()
+        self.toggle_layout = QHBoxLayout()
+
+        self.toggle_layout.addWidget(self.switch_to_table)
+        self.toggle_layout.addWidget(self.switch_to_list)
+        self.toggle_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        self.master_layout.addLayout(self.toggle_layout)
         self.master_layout.addWidget(self.inputs)
         self.master_layout.addWidget(self.add_btn)
 
         self.master_layout.addWidget(self.table)
         self.master_layout.addWidget(self.list)
+        self.list.hide()
 
         self.setLayout(self.master_layout)
 
@@ -40,6 +58,18 @@ class DisplayWidget(QWidget):
         self.inputs.insert_data()
         self.table.load_table()
         self.list.load_data()
+
+    def toggle_view(self):
+        if self.switch_to_table.isEnabled():
+            self.switch_to_table.setDisabled(True)
+            self.list.hide()
+            self.switch_to_list.setDisabled(False)
+            self.table.show()
+        else:
+            self.switch_to_list.setDisabled(True)
+            self.table.hide()
+            self.switch_to_table.setDisabled(False)
+            self.list.show()
 
     # df - defaulted
     # le - line edit
