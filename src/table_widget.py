@@ -10,7 +10,7 @@ class TableWidget(QTableWidget):
 
         self.setColumnCount(len(self.master.COLUMN_NAMES))
         self.setHorizontalHeaderLabels(self.master.COLUMN_NAMES)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)

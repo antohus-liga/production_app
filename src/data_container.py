@@ -29,8 +29,8 @@ class DataContainer(QWidget):
             self.name = QLabel(f"{data[2]} {data[3]}")
 
         self.sep = QFrame()
-        self.sep.setFrameShape(QFrame.HLine)
-        self.sep.setFrameShadow(QFrame.Sunken)
+        self.sep.setFrameShape(QFrame.Shape.HLine)
+        self.sep.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.header_layout.addWidget(self.code)
         self.header_layout.addWidget(self.name)

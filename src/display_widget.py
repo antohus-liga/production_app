@@ -1,13 +1,8 @@
 from PySide6.QtWidgets import (
-    QComboBox,
-    QDateEdit,
     QWidget,
     QPushButton,
     QVBoxLayout,
-    QLineEdit,
-    QMessageBox,
 )
-from PySide6.QtSql import QSqlQuery
 from inputs_container import InputsContainer
 from list_widget import ListWidget
 from table_widget import TableWidget
