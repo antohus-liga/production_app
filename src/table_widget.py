@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QHeaderView, QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
 from PySide6.QtSql import QSqlQuery
 
 

@@ -1,3 +1,4 @@
+from PySide6.QtCore import QRegularExpression
 from PySide6.QtWidgets import (
     QWidget,
     QLabel,
@@ -9,6 +10,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 from PySide6.QtSql import QSqlQuery
+from PySide6.QtGui import QDoubleValidator, QRegularExpressionValidator
 
 
 class InputsContainer(QWidget):
@@ -22,6 +24,28 @@ class InputsContainer(QWidget):
             match self.master.column_info[col_name]["input_type"]:
                 case "line_edit":
                     input_widget = QLineEdit()
+                    match self.master.column_info[col_name]["data_type"]:
+                        case "string":
+                            regex = QRegularExpression(r"[A-Za-z\-]+")
+                            input_widget.setValidator(
+                                QRegularExpressionValidator(regex)
+                            )
+                        case "integer":
+                            regex = QRegularExpression(r"\d+")
+                            input_widget.setValidator(
+                                QRegularExpressionValidator(regex)
+                            )
+                        case "float":
+                            input_widget.setValidator(QDoubleValidator())
+                        case "uppercase_only":
+                            regex = QRegularExpression(r"[A-Z0-9]+")
+                            input_widget.setValidator(
+                                QRegularExpressionValidator(regex)
+                            )
+                    input_widget.setMaxLength(
+                        self.master.column_info[col_name]["max_len"]
+                    )
+
                 case "combo_box":
                     input_widget = QComboBox()
                     input_widget.addItem("test")
@@ -68,8 +92,6 @@ class InputsContainer(QWidget):
                 value = input_field.currentText()
             elif isinstance(input_field, QDateEdit):
                 value = input_field.date().toString("dd/MM/yyyy")
-            else:
-                value = ""
 
             if value != "":
                 query.addBindValue(value)

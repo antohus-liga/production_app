@@ -54,7 +54,6 @@ class DataContainer(QWidget):
         self.header_layout.addWidget(name_label)
         self.header_layout.setStretch(0, 1)
         self.header_layout.setStretch(1, 5)
-        print(self.data_dict.keys())
 
         self.sep = QFrame()
         self.sep.setFrameShape(QFrame.Shape.HLine)
