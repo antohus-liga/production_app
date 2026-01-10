@@ -19,17 +19,17 @@ class InputsContainer(QWidget):
         self.inputs: list[tuple[QLabel, QLineEdit | QComboBox | QDateEdit]] = []
         for col_name in self.master.COLUMN_NAMES:
             input_widget = QLineEdit()
-            match self.master.column_info[col_name]:
-                case "le":
+            match self.master.column_info[col_name]["input_type"]:
+                case "line_edit":
                     input_widget = QLineEdit()
-                case "cb":
+                case "combo_box":
                     input_widget = QComboBox()
                     input_widget.addItem("test")
-                case "de":
+                case "date_edit":
                     input_widget = QDateEdit()
                     input_widget.setCalendarPopup(True)
                     input_widget.setDisplayFormat("dd/MM/yyyy")
-                case "df":
+                case "defaulted":
                     continue
 
             self.inputs.append((QLabel(col_name), input_widget))
@@ -118,9 +118,9 @@ class InputsContainer(QWidget):
                     """
                     INSERT INTO materials (
                         mat_code, name, category, base_unit, unit_price, 
-                        status, created_at, updated_at
+                        created_at, updated_at
                     ) VALUES (
-                        ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?, ?,
                         STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
                         STRFTIME('%d/%m/%Y', 'now', 'localtime')
                     )

@@ -10,10 +10,13 @@ class TableWidget(QTableWidget):
 
         self.setColumnCount(len(self.master.COLUMN_NAMES))
         self.setHorizontalHeaderLabels(self.master.COLUMN_NAMES)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
+        for i in range(len(self.master.COLUMN_NAMES)):
+            self.setColumnWidth(
+                i, self.master.column_info[self.master.COLUMN_NAMES[i]]["col_width"]
+            )
 
     def load_table(self):
         self.setRowCount(0)

@@ -8,11 +8,13 @@ from PySide6.QtWidgets import (
 from inputs_container import InputsContainer
 from list_widget import ListWidget
 from table_widget import TableWidget
+import json
 
 
 class DisplayWidget(QWidget):
     def __init__(self, table_name):
         super().__init__()
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         self.TABLE_NAME = table_name
 
@@ -71,93 +73,7 @@ class DisplayWidget(QWidget):
             self.switch_to_table.setDisabled(False)
             self.list.show()
 
-    # df - defaulted
-    # le - line edit
-    # cb - combo box
-    # de - date edit
     def get_column_names(self):
-        map = {
-            "clients": {
-                "ID": "df",
-                "Code": "le",
-                "First Name": "le",
-                "Last Name": "le",
-                "Type": "cb",
-                "Company Name": "le",
-                "Country": "le",
-                "City": "le",
-                "Phone": "le",
-                "Email": "le",
-                "Date of Birth": "de",
-                "NIF": "le",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "suppliers": {
-                "ID": "df",
-                "Code": "le",
-                "First Name": "le",
-                "Last Name": "le",
-                "Type": "cb",
-                "Company Name": "le",
-                "Country": "le",
-                "City": "le",
-                "Phone": "le",
-                "Email": "le",
-                "Date of Birth": "de",
-                "NIF": "le",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "materials": {
-                "ID": "df",
-                "Code": "le",
-                "Name": "le",
-                "Category": "cb",
-                "Quantity": "df",
-                "Base unit": "cb",
-                "Unit price": "le",
-                "Status": "cb",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "products": {
-                "ID": "df",
-                "Code": "le",
-                "Name": "le",
-                "Category": "cb",
-                "Quantity": "df",
-                "Base unit": "cb",
-                "Unit price": "le",
-                "Production cost": "df",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "movements_in": {
-                "Number": "df",
-                "Material": "cb",
-                "Supplier": "cb",
-                "Quantity": "le",
-                "Total price": "df",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "movements_out": {
-                "Number": "df",
-                "Product": "cb",
-                "Supplier": "cb",
-                "Quantity": "le",
-                "Total price": "df",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-            "production_line": {
-                "Number": "df",
-                "Product": "cb",
-                "Quantity": "le",
-                "Total cost": "df",
-                "Created at": "df",
-                "Updated at": "df",
-            },
-        }
+        with open("src/table_info.json") as f:
+            map = json.load(f)
         return map[self.TABLE_NAME]

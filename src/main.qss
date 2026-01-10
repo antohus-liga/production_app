@@ -1,0 +1,16 @@
+#DataContainer {
+    background-color: #414245;
+    border-radius: 6px;
+}
+
+#DataContainer:hover {
+    background-color: #515357;
+}
+
+QListWidget::item {
+    margin: 5px;
+}
+
+#Separator {
+    background-color: #424242;
+}

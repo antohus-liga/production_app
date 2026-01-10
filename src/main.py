@@ -5,7 +5,12 @@ import sys
 
 
 app = QApplication(sys.argv)
+
+with open("src/main.qss") as style:
+    app.setStyleSheet(style.read())
+
 get_connection()
 clients_widget = DisplayWidget("clients")
 clients_widget.show()
+
 app.exec()
