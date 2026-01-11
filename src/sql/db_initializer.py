@@ -70,7 +70,6 @@ def initialize_schema() -> None:
             quantity INTEGER NOT NULL DEFAULT 0,
             base_unit TEXT,
             unit_price FLOAT NOT NULL DEFAULT 0,
-            status TEXT NOT NULL DEFAULT "active",
             created_at TEXT,
             updated_at TEXT
         );
