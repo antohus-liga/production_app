@@ -2,9 +2,9 @@ from PySide6.QtCore import Signal
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QAbstractItemView, QListWidget, QListWidgetItem
 from PySide6.QtSql import QSqlQuery
-from data_container import DataContainer
 
-from popup_widget import PopupWidget
+from ui.containers.data_container import DataContainer
+from ui.containers.popup_container import PopupContainer
 
 
 class ListWidget(QListWidget):
@@ -45,7 +45,7 @@ class ListWidget(QListWidget):
 
         global_pos = self.viewport().mapToGlobal(pos)
 
-        self.popup = PopupWidget(self, item=item)
+        self.popup = PopupContainer(self, item=item)
         self.popup.move(global_pos)
         self.popup.updated.connect(lambda: self.updated.emit())
 

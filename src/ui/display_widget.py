@@ -7,10 +7,11 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
 )
-from inputs_container import InputsContainer
-from list_widget import ListWidget
-from table_widget import TableWidget
 import json
+
+from ui.containers.inputs_container import InputsContainer
+from ui.views.list_widget import ListWidget
+from ui.views.table_widget import TableWidget
 
 
 class DisplayWidget(QWidget):

@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QApplication
-from display_widget import DisplayWidget
-from sql.manager import get_connection
 import sys
+
+from ui.display_widget import DisplayWidget
+from sql.manager import get_connection
 
 
 app = QApplication(sys.argv)

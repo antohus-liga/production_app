@@ -11,10 +11,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from inputs_container import InputsContainer
+from ui.containers.inputs_container import InputsContainer
 
 
-class PopupWidget(QWidget):
+class PopupContainer(QWidget):
     updated = Signal()
 
     def __init__(self, master, row=None, item=None):

@@ -3,7 +3,7 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem
 from PySide6.QtSql import QSqlQuery
 
-from popup_widget import PopupWidget
+from ui.containers.popup_container import PopupContainer
 
 
 class TableWidget(QTableWidget):
@@ -49,7 +49,7 @@ class TableWidget(QTableWidget):
 
         global_pos = self.viewport().mapToGlobal(pos)
 
-        self.popup = PopupWidget(self, row=row)
+        self.popup = PopupContainer(self, row=row)
         self.popup.move(global_pos)
         self.popup.updated.connect(lambda: self.updated.emit())
 
