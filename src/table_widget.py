@@ -13,10 +13,7 @@ class TableWidget(QTableWidget):
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
-        for i in range(len(self.master.COLUMN_NAMES)):
-            self.setColumnWidth(
-                i, self.master.column_info[self.master.COLUMN_NAMES[i]]["col_width"]
-            )
+        self.setColumnHidden(0, True)
 
     def load_table(self):
         self.setRowCount(0)
@@ -30,3 +27,4 @@ class TableWidget(QTableWidget):
                 self.setItem(row, col, QTableWidgetItem(str(query.value(col))))
 
             row += 1
+        self.resizeColumnsToContents()
