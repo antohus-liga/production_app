@@ -413,5 +413,39 @@
                 "db_name": "updated_at"
             }
         }
+    },
+    "product_materials": {
+        "table_name": "Product Materials",
+        "columns": {
+            "Product": {
+                "info_type": "general",
+                "input_type": "combo_box",
+                "values": [],
+                "db_name": "pro_code"
+            },
+            "Material": {
+                "info_type": "general",
+                "input_type": "combo_box",
+                "values": [],
+                "db_name": "mat_code"
+            },
+            "Quantity": {
+                "max_len": 10,
+                "info_type": "extra",
+                "input_type": "line_edit",
+                "data_type": "integer",
+                "db_name": "quantity"
+            },
+            "Created at": {
+                "info_type": "log",
+                "input_type": "defaulted",
+                "db_name": "created_at"
+            },
+            "Updated at": {
+                "info_type": "log",
+                "input_type": "defaulted",
+                "db_name": "updated_at"
+            }
+        }
     }
 }

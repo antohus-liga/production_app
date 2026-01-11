@@ -75,8 +75,7 @@ class DisplayWidget(QWidget):
 
     def insert_values(self):
         self.inputs.insert_data()
-        self.table.load()
-        self.list.load()
+        self.update_views()
 
     def delete_values(self):
         query = QSqlQuery()

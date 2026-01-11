@@ -2,6 +2,7 @@ import json
 from PySide6.QtWidgets import QMainWindow, QTabWidget
 
 from ui.display_widget import DisplayWidget
+from ui.prod_mat_widget import ProdMatWidget
 
 
 class MainWindow(QMainWindow):
@@ -12,17 +13,20 @@ class MainWindow(QMainWindow):
         self.db_table_names = []
         with open("src/table_info.json") as f:
             table_info = json.load(f)
-            self.db_table_names = table_info.keys()
+            self.db_table_names = list(table_info.keys())
             self.table_names = [
                 table_info[name]["table_name"] for name in self.db_table_names
             ]
+        self.db_table_names.pop()
 
         self.tabs = QTabWidget()
         self.display_widgets: list[DisplayWidget] = [
             DisplayWidget(table_name) for table_name in self.db_table_names
         ]
+        self.prod_mat_widget = ProdMatWidget()
 
         for i in range(len(self.display_widgets)):
             self.tabs.addTab(self.display_widgets[i], self.table_names[i])
+        self.tabs.addTab(self.prod_mat_widget, self.table_names[-1])
 
         self.setCentralWidget(self.tabs)

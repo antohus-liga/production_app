@@ -48,7 +48,10 @@ class InputsContainer(QWidget):
 
                 case "combo_box":
                     input_widget = QComboBox()
-                    input_widget.addItems(self.master.column_info[col_name]["values"])
+                    values = self.master.column_info[col_name]["values"]
+                    if len(values) < 1:
+                        values = ["test"]
+                    input_widget.addItems(values)
                 case "date_edit":
                     input_widget = QDateEdit()
                     input_widget.setCalendarPopup(True)
@@ -197,6 +200,16 @@ class InputsContainer(QWidget):
                         ?, ?,
                         STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
                         STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
+            case "product_materials":
+                query.prepare(
+                    """
+                    INSERT INTO product_materials (
+                        pro_code, mat_code, quantity
+                    ) VALUES (
+                        ?, ?, ?
                     )
                 """
                 )
