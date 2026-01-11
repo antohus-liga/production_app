@@ -187,4 +187,17 @@ class InputsContainer(QWidget):
                     )
                 """
                 )
+            case "production_line":
+                query.prepare(
+                    """
+                    INSERT INTO production_line (
+                        pro_id, quantity,
+                        created_at, updated_at
+                    ) VALUES (
+                        ?, ?,
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
+                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
+                    )
+                """
+                )
         return query
