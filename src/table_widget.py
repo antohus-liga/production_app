@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
+from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem
 from PySide6.QtSql import QSqlQuery
 
 
@@ -14,6 +15,8 @@ class TableWidget(QTableWidget):
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
         self.setColumnHidden(0, True)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
 
     def load_table(self):
         self.setRowCount(0)
