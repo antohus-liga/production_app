@@ -1,238 +1,200 @@
 {
     "clients": {
         "ID": {
-            "col_width": 0,
             "info_type": "internal",
             "input_type": "defaulted"
         },
         "Code": {
             "max_len": 15,
-            "col_width": 110,
             "info_type": "header",
             "input_type": "line_edit",
             "data_type": "special"
         },
         "First Name": {
             "max_len": 30,
-            "col_width": 160,
             "info_type": "name",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Last Name": {
             "max_len": 30,
-            "col_width": 160,
             "info_type": "name",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Type": {
-            "col_width": 160,
             "info_type": "general",
             "input_type": "combo_box"
         },
         "Company Name": {
             "max_len": 50,
-            "col_width": 275,
             "info_type": "general",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Country": {
             "max_len": 35,
-            "col_width": 220,
             "info_type": "location",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "City": {
             "max_len": 25,
-            "col_width": 150,
             "info_type": "location",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Phone": {
             "max_len": 20,
-            "col_width": 120,
             "info_type": "contact",
             "input_type": "line_edit",
             "data_type": "integer"
         },
         "Email": {
             "max_len": 60,
-            "col_width": 320,
             "info_type": "contact",
             "input_type": "line_edit",
             "data_type": "special"
         },
         "Date of Birth": {
-            "col_width": 80,
             "info_type": "extra",
             "input_type": "date_edit"
         },
         "NIF": {
             "max_len": 16,
-            "col_width": 115,
             "info_type": "extra",
             "input_type": "line_edit",
             "data_type": "uppercase_only"
         },
         "Created at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         },
         "Updated at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         }
     },
     "suppliers": {
         "ID": {
-            "col_width": 0,
             "info_type": "internal",
             "input_type": "defaulted"
         },
         "Code": {
             "max_len": 15,
-            "col_width": 110,
             "info_type": "header",
             "input_type": "line_edit",
             "data_type": "special"
         },
         "First Name": {
             "max_len": 30,
-            "col_width": 160,
             "info_type": "name",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Last Name": {
             "max_len": 30,
-            "col_width": 160,
             "info_type": "name",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Type": {
-            "col_width": 160,
             "info_type": "general",
             "input_type": "combo_box"
         },
         "Company Name": {
             "max_len": 50,
-            "col_width": 275,
             "info_type": "general",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Country": {
             "max_len": 35,
-            "col_width": 220,
             "info_type": "location",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "City": {
             "max_len": 25,
-            "col_width": 150,
             "info_type": "location",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Phone": {
             "max_len": 20,
-            "col_width": 120,
             "info_type": "contact",
             "input_type": "line_edit",
             "data_type": "integer"
         },
         "Email": {
             "max_len": 60,
-            "col_width": 320,
             "info_type": "contact",
             "input_type": "line_edit",
             "data_type": "special"
         },
         "Date of Birth": {
-            "col_width": 80,
             "info_type": "extra",
             "input_type": "date_edit"
         },
         "NIF": {
             "max_len": 16,
-            "col_width": 115,
             "info_type": "extra",
             "input_type": "line_edit",
             "data_type": "uppercase_only"
         },
         "Created at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         },
         "Updated at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         }
     },
     "materials": {
         "ID": {
-            "col_width": 0,
             "info_type": "internal",
             "input_type": "defaulted"
         },
         "Code": {
             "max_len": 15,
-            "col_width": 110,
             "info_type": "header",
             "input_type": "line_edit",
             "data_type": "special"
         },
         "Name": {
             "max_len": 60,
-            "col_width": 320,
             "info_type": "name",
             "input_type": "line_edit",
             "data_type": "string"
         },
         "Category": {
-            "col_width": 160,
             "info_type": "general",
             "input_type": "combo_box"
         },
         "Quantity": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         },
         "Base unit": {
-            "col_width": 80,
             "info_type": "general",
             "input_type": "combo_box"
         },
         "Unit price": {
             "max_len": 30,
-            "col_width": 100,
             "info_type": "general",
             "input_type": "line_edit",
             "data_type": "float"
         },
         "Status": {
-            "col_width": 80,
             "info_type": "log",
             "input_type": "defaulted"
         },
         "Created at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         },
         "Updated at": {
-            "col_width": 75,
             "info_type": "log",
             "input_type": "defaulted"
         }
