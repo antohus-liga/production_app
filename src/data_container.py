@@ -44,8 +44,6 @@ class DataContainer(QWidget):
                     self.header_layout.addWidget(header)
                 case "name":
                     self.name += f"{data[i]} "
-                case "internal":
-                    continue
                 case _:
                     self.data_dict[info_type.capitalize()].append((col, data[i]))
 

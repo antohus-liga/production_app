@@ -91,6 +91,19 @@ class DisplayWidget(QWidget):
                 id = self.table.model().index(row, 0).data()
                 query.bindValue(0, id)
                 query.exec()
+        else:
+            selection = self.list.selectionModel()
+            if not selection.hasSelection():
+                QMessageBox.warning(
+                    self, "Selection is empty", "Select any item to delete it."
+                )
+                return
+
+            items = self.list.selectedItems()
+            for item in items:
+                id = item.data(Qt.ItemDataRole.UserRole)
+                query.bindValue(0, id)
+                query.exec()
 
         self.table.load_table()
         self.list.load_data()
