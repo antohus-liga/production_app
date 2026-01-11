@@ -23,8 +23,7 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS suppliers(
-            sup_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sup_code TEXT UNIQUE NOT NULL,
+            code TEXT PRIMARY KEY NOT NULL,
             first_name TEXT,
             last_name TEXT,
             sup_type TEXT,
@@ -44,8 +43,7 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS clients(
-            cli_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            cli_code TEXT UNIQUE NOT NULL,
+            code TEXT PRIMARY KEY NOT NULL,
             first_name TEXT,
             last_name TEXT,
             cli_type TEXT,
@@ -66,8 +64,7 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS materials(
-            mat_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            mat_code TEXT UNIQUE NOT NULL,
+            code TEXT PRIMARY KEY NOT NULL,
             name TEXT,
             category TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
@@ -85,8 +82,7 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS products(
-            pro_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pro_code TEXT UNIQUE NOT NULL,
+            code TEXT PRIMARY KEY NOT NULL,
             name TEXT,
             category TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
@@ -103,15 +99,15 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS movements_in(
-            mov_nr INTEGER PRIMARY KEY AUTOINCREMENT,
-            mat_id TEXT,
-            sup_id TEXT,
+            nr INTEGER PRIMARY KEY AUTOINCREMENT,
+            mat_code TEXT,
+            sup_code TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_price FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT,
-            FOREIGN KEY(mat_id) REFERENCES materials(mat_id),
-            FOREIGN KEY(sup_id) REFERENCES supliers(sup_id)
+            FOREIGN KEY(mat_code) REFERENCES materials(code),
+            FOREIGN KEY(sup_code) REFERENCES supliers(code)
         );
         """
     )
@@ -120,15 +116,15 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS movements_out(
-            mov_nr INTEGER PRIMARY KEY AUTOINCREMENT,
-            pro_id TEXT,
-            cli_id TEXT,
+            nr INTEGER PRIMARY KEY AUTOINCREMENT,
+            pro_code TEXT,
+            cli_code TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_price FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT,
-            FOREIGN KEY(pro_id) REFERENCES materials(pro_id),
-            FOREIGN KEY(cli_id) REFERENCES supliers(cli_id)
+            FOREIGN KEY(pro_code) REFERENCES materials(code),
+            FOREIGN KEY(cli_code) REFERENCES supliers(code)
         );
         """
     )
@@ -136,11 +132,12 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS product_materials(
-            pro_id TEXT,
-            mat_id TEXT,
+            nr INTEGER PRIMARY KEY AUTOINCREMENT,
+            pro_code TEXT,
+            mat_code TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
-            FOREIGN KEY(pro_id) REFERENCES materials(pro_id),
-            FOREIGN KEY(mat_id) REFERENCES supliers(mat_id)
+            FOREIGN KEY(pro_code) REFERENCES materials(code),
+            FOREIGN KEY(mat_code) REFERENCES supliers(code)
         );
         """
     )
@@ -149,13 +146,13 @@ def initialize_schema() -> None:
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS production_line(
-            prdc_nr INTEGER PRIMARY KEY AUTOINCREMENT,
-            pro_id TEXT,
+            nr INTEGER PRIMARY KEY AUTOINCREMENT,
+            pro_code TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
             total_cost FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT,
-            FOREIGN KEY(pro_id) REFERENCES materials(pro_id)
+            FOREIGN KEY(pro_code) REFERENCES materials(code)
         );
         """
     )

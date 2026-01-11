@@ -72,8 +72,10 @@ class DisplayWidget(QWidget):
 
     def delete_values(self):
         query = QSqlQuery()
-        if not query.prepare(f"DELETE FROM clients WHERE cli_code = ?"):
-            print(query.lastError().text())
+        if self.TABLE_NAME in ("clients", "suppliers", "materials", "products"):
+            query.prepare(f"DELETE FROM {self.TABLE_NAME} WHERE code = ?")
+        else:
+            query.prepare(f"DELETE FROM {self.TABLE_NAME} WHERE nr = ?")
 
         if not self.switch_to_table.isEnabled():
             selection = self.table.selectionModel()
@@ -86,8 +88,8 @@ class DisplayWidget(QWidget):
             rows = selection.selectedRows()
             for index in rows:
                 row = index.row()
-                code = self.table.model().index(row, 1).data()
-                query.bindValue(0, code)
+                id = self.table.model().index(row, 0).data()
+                query.bindValue(0, id)
                 query.exec()
 
         self.table.load_table()

@@ -113,7 +113,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO clients (
-                        cli_code, first_name, last_name, cli_type, company_name,
+                        code, first_name, last_name, cli_type, company_name,
                         country, city, phone, email, date_of_birth, nif, created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
@@ -126,7 +126,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO suppliers (
-                        sup_code, first_name, last_name, sup_type, company_name,
+                        code, first_name, last_name, sup_type, company_name,
                         country, city, phone, email, date_of_birth, nif, created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
@@ -139,7 +139,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO materials (
-                        mat_code, name, category, base_unit, unit_price, 
+                        code, name, category, base_unit, unit_price, 
                         created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?,
@@ -152,7 +152,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO products (
-                        pro_code, name, category, base_unit,
+                        code, name, category, base_unit,
                         unit_price, created_at, updated_at
                     ) VALUES (
                         ?, ?, ?, ?, ?,
@@ -165,7 +165,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO movements_in (
-                        mat_id, sup_id, quantity,
+                        mat_code, sup_code, quantity,
                         created_at, updated_at
                     ) VALUES (
                         ?, ?, ?,
@@ -178,7 +178,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO movements_out (
-                        pro_id, cli_id, quantity,
+                        pro_code, cli_code, quantity,
                         created_at, updated_at
                     ) VALUES (
                         ?, ?, ?,
@@ -191,7 +191,7 @@ class InputsContainer(QWidget):
                 query.prepare(
                     """
                     INSERT INTO production_line (
-                        pro_id, quantity,
+                        pro_code, quantity,
                         created_at, updated_at
                     ) VALUES (
                         ?, ?,

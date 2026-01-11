@@ -1,9 +1,5 @@
 {
     "clients": {
-        "ID": {
-            "info_type": "internal",
-            "input_type": "defaulted"
-        },
         "Code": {
             "max_len": 15,
             "info_type": "header",
@@ -76,10 +72,6 @@
         }
     },
     "suppliers": {
-        "ID": {
-            "info_type": "internal",
-            "input_type": "defaulted"
-        },
         "Code": {
             "max_len": 15,
             "info_type": "header",
@@ -152,10 +144,6 @@
         }
     },
     "materials": {
-        "ID": {
-            "info_type": "internal",
-            "input_type": "defaulted"
-        },
         "Code": {
             "max_len": 15,
             "info_type": "header",
@@ -200,10 +188,6 @@
         }
     },
     "products": {
-        "ID": {
-            "info_type": "internal",
-            "input_type": "defaulted"
-        },
         "Code": {
             "max_len": 15,
             "info_type": "header",
