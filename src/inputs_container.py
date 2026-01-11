@@ -48,7 +48,7 @@ class InputsContainer(QWidget):
 
                 case "combo_box":
                     input_widget = QComboBox()
-                    input_widget.addItem("test")
+                    input_widget.addItems(self.master.column_info[col_name]["values"])
                 case "date_edit":
                     input_widget = QDateEdit()
                     input_widget.setCalendarPopup(True)
