@@ -4,71 +4,84 @@
             "max_len": 15,
             "info_type": "header",
             "input_type": "line_edit",
-            "data_type": "special"
+            "data_type": "special",
+            "db_name": "code"
         },
         "First Name": {
             "max_len": 30,
             "info_type": "name",
             "input_type": "line_edit",
-            "data_type": "string"
+            "data_type": "string",
+            "db_name": "first_name"
         },
         "Last Name": {
             "max_len": 30,
             "info_type": "name",
             "input_type": "line_edit",
-            "data_type": "string"
+            "data_type": "string",
+            "db_name": "last_name"
         },
         "Type": {
             "info_type": "general",
-            "input_type": "combo_box"
+            "input_type": "combo_box",
+            "db_name": "cli_type"
         },
         "Company Name": {
             "max_len": 50,
             "info_type": "general",
             "input_type": "line_edit",
-            "data_type": "string"
+            "data_type": "string",
+            "db_name": "company_name"
         },
         "Country": {
             "max_len": 35,
             "info_type": "location",
             "input_type": "line_edit",
-            "data_type": "string"
+            "data_type": "string",
+            "db_name": "country"
         },
         "City": {
             "max_len": 25,
             "info_type": "location",
             "input_type": "line_edit",
-            "data_type": "string"
+            "data_type": "string",
+            "db_name": "city"
         },
         "Phone": {
             "max_len": 20,
             "info_type": "contact",
             "input_type": "line_edit",
-            "data_type": "integer"
+            "data_type": "integer",
+            "db_name": "phone"
         },
         "Email": {
             "max_len": 60,
             "info_type": "contact",
             "input_type": "line_edit",
-            "data_type": "special"
+            "data_type": "special",
+            "db_name": "email"
         },
         "Date of Birth": {
             "info_type": "extra",
-            "input_type": "date_edit"
+            "input_type": "date_edit",
+            "db_name": "date_of_birth"
         },
         "NIF": {
             "max_len": 16,
             "info_type": "extra",
             "input_type": "line_edit",
-            "data_type": "uppercase_only"
+            "data_type": "uppercase_only",
+            "db_name": "nif"
         },
         "Created at": {
             "info_type": "log",
-            "input_type": "defaulted"
+            "input_type": "defaulted",
+            "db_name": "created_at"
         },
         "Updated at": {
             "info_type": "log",
-            "input_type": "defaulted"
+            "input_type": "defaulted",
+            "db_name": "updated_at"
         }
     },
     "suppliers": {

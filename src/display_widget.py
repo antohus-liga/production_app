@@ -27,6 +27,9 @@ class DisplayWidget(QWidget):
         self.list = ListWidget(self)
         self.inputs = InputsContainer(self)
 
+        self.table.updated.connect(self.update_views)
+        self.list.updated.connect(self.update_views)
+
         self.add_btn = QPushButton("Add")
         self.delete_btn = QPushButton("Delete")
 
@@ -63,12 +66,16 @@ class DisplayWidget(QWidget):
 
         self.setLayout(self.master_layout)
 
-        self.table.load_table()
+        self.table.load()
+
+    def update_views(self):
+        self.table.load()
+        self.list.load()
 
     def insert_values(self):
         self.inputs.insert_data()
-        self.table.load_table()
-        self.list.load_data()
+        self.table.load()
+        self.list.load()
 
     def delete_values(self):
         query = QSqlQuery()
@@ -105,8 +112,8 @@ class DisplayWidget(QWidget):
                 query.bindValue(0, id)
                 query.exec()
 
-        self.table.load_table()
-        self.list.load_data()
+        self.table.load()
+        self.list.load()
 
     def toggle_view(self):
         if self.switch_to_table.isEnabled():
