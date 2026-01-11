@@ -64,6 +64,9 @@ class DataContainer(QWidget):
         grid_row = 0
         grid_col = 0
         for info_type in self.data_dict.keys():
+            if len(self.data_dict[info_type]) <= 0:
+                continue
+
             self.containers.append(QGridLayout())
             self.containers[-1].setColumnStretch(0, 1)
             self.containers[-1].setColumnStretch(1, 6)

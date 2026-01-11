@@ -173,11 +173,11 @@
             "input_type": "combo_box"
         },
         "Quantity": {
-            "info_type": "log",
+            "info_type": "extra",
             "input_type": "defaulted"
         },
         "Base unit": {
-            "info_type": "general",
+            "info_type": "extra",
             "input_type": "combo_box"
         },
         "Unit price": {
@@ -200,41 +200,143 @@
         }
     },
     "products": {
-        "ID": "df",
-        "Code": "le",
-        "Name": "le",
-        "Category": "cb",
-        "Quantity": "df",
-        "Base unit": "cb",
-        "Unit price": "le",
-        "Production cost": "df",
-        "Created at": "df",
-        "Updated at": "df"
+        "ID": {
+            "info_type": "internal",
+            "input_type": "defaulted"
+        },
+        "Code": {
+            "max_len": 15,
+            "info_type": "header",
+            "input_type": "line_edit",
+            "data_type": "special"
+        },
+        "Name": {
+            "max_len": 60,
+            "info_type": "name",
+            "input_type": "line_edit",
+            "data_type": "string"
+        },
+        "Category": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Quantity": {
+            "info_type": "extra",
+            "input_type": "defaulted"
+        },
+        "Base unit": {
+            "info_type": "extra",
+            "input_type": "combo_box"
+        },
+        "Unit price": {
+            "max_len": 30,
+            "info_type": "general",
+            "input_type": "line_edit",
+            "data_type": "float"
+        },
+        "Production cost": {
+            "info_type": "extra",
+            "input_type": "defaulted"
+        },
+        "Created at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        },
+        "Updated at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        }
     },
     "movements_in": {
-        "Number": "df",
-        "Material": "cb",
-        "Supplier": "cb",
-        "Quantity": "le",
-        "Total price": "df",
-        "Created at": "df",
-        "Updated at": "df"
+        "Number": {
+            "info_type": "header",
+            "input_type": "defaulted"
+        },
+        "Material": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Supplier": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Quantity": {
+            "max_len": 10,
+            "info_type": "extra",
+            "input_type": "line_edit",
+            "data_type": "integer"
+        },
+        "Total price": {
+            "info_type": "extra",
+            "input_type": "defaulted"
+        },
+        "Created at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        },
+        "Updated at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        }
     },
     "movements_out": {
-        "Number": "df",
-        "Product": "cb",
-        "Supplier": "cb",
-        "Quantity": "le",
-        "Total price": "df",
-        "Created at": "df",
-        "Updated at": "df"
+        "Number": {
+            "info_type": "header",
+            "input_type": "defaulted"
+        },
+        "Product": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Client": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Quantity": {
+            "max_len": 10,
+            "info_type": "extra",
+            "input_type": "line_edit",
+            "data_type": "integer"
+        },
+        "Total price": {
+            "info_type": "extra",
+            "input_type": "defaulted"
+        },
+        "Created at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        },
+        "Updated at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        }
     },
     "production_line": {
-        "Number": "df",
-        "Product": "cb",
-        "Quantity": "le",
-        "Total cost": "df",
-        "Created at": "df",
-        "Updated at": "df"
+        "Number": {
+            "info_type": "header",
+            "input_type": "defaulted"
+        },
+        "Product": {
+            "info_type": "general",
+            "input_type": "combo_box"
+        },
+        "Quantity": {
+            "max_len": 10,
+            "info_type": "extra",
+            "input_type": "line_edit",
+            "data_type": "integer"
+        },
+        "Total price": {
+            "info_type": "extra",
+            "input_type": "defaulted"
+        },
+        "Created at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        },
+        "Updated at": {
+            "info_type": "log",
+            "input_type": "defaulted"
+        }
     }
 }
