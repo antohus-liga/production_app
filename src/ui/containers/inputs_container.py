@@ -93,8 +93,6 @@ class InputsContainer(QWidget):
             input_widget.clear()
 
             query_str = self.master.column_info[col_name]["values"][1]
-            print(self.master.TABLE_NAME)
-            print(query_str)
             query = QSqlQuery()
             query.exec(query_str)
 

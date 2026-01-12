@@ -1,5 +1,5 @@
 from PySide6.QtSql import QSqlQuery
-from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PySide6.QtWidgets import QAbstractItemView, QTreeWidget, QTreeWidgetItem
 
 
 class TreeWidget(QTreeWidget):
@@ -7,6 +7,9 @@ class TreeWidget(QTreeWidget):
         super().__init__()
         self.setColumnCount(2)
         self.setHeaderLabels(("Name", "Quantity"))
+        self.setColumnWidth(0, 500)
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
 
         self.load()
 
@@ -17,7 +20,6 @@ class TreeWidget(QTreeWidget):
         query.exec(
             f"SELECT pro_code, mat_code, quantity FROM product_materials ORDER BY pro_code"
         )
-        print(query.lastError().text())
 
         items = []
         current_product = None
@@ -27,7 +29,6 @@ class TreeWidget(QTreeWidget):
             product = query.value(0)
             material = query.value(1)
             quantity = str(query.value(2))
-            print(product, material, quantity)
 
             if product != current_product:
                 if item.childCount() > 0:

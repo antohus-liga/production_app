@@ -135,6 +135,7 @@ def initialize_schema() -> None:
             pro_code TEXT,
             mat_code TEXT,
             quantity INTEGER NOT NULL DEFAULT 0,
+            CONSTRAINT uq_pro_mat UNIQUE (pro_code, mat_code),
             FOREIGN KEY(pro_code) REFERENCES materials(code),
             FOREIGN KEY(mat_code) REFERENCES supliers(code)
         );

@@ -1,5 +1,6 @@
 import json
 from PySide6.QtCore import Qt
+from PySide6.QtSql import QSqlQuery
 from PySide6.QtWidgets import QHBoxLayout, QPushButton, QVBoxLayout, QWidget
 
 from ui.containers.inputs_container import InputsContainer
@@ -23,6 +24,7 @@ class ProdMatWidget(QWidget):
         self.delete_btn = QPushButton("Delete")
 
         self.add_btn.clicked.connect(self.insert_values)
+        self.delete_btn.clicked.connect(self.delete_values)
 
         self.master_layout = QVBoxLayout()
         self.buttons_layout = QHBoxLayout()
@@ -45,4 +47,24 @@ class ProdMatWidget(QWidget):
 
     def insert_values(self):
         self.inputs.insert_data()
+        self.tree.load()
+
+    def delete_values(self):
+        query = QSqlQuery()
+        items = self.tree.selectedItems()
+        for item in items:
+            parent = item.parent()
+
+            if parent is not None:
+                query.prepare(
+                    "DELETE FROM product_materials WHERE pro_code = ? AND mat_code = ?"
+                )
+                query.addBindValue(parent.text(0))
+                query.addBindValue(item.text(0))
+            else:
+                query.prepare("DELETE FROM product_materials WHERE pro_code = ?")
+                query.addBindValue(item.text(0))
+
+            query.exec()
+
         self.tree.load()
