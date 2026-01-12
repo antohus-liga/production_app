@@ -36,6 +36,8 @@ class ProdMatWidget(QWidget):
 
         self.setLayout(self.master_layout)
 
+        self.inputs.update_combos()
+
     def get_column_names(self):
         with open("src/table_info.json") as f:
             map = json.load(f)

@@ -33,7 +33,7 @@ def initialize_schema() -> None:
             phone TEXT,
             email TEXT,
             date_of_birth DATE,
-            nif INT,
+            nif TEXT,
             created_at TEXT,
             updated_at TEXT
         );
@@ -53,7 +53,7 @@ def initialize_schema() -> None:
             phone TEXT,
             email TEXT,
             date_of_birth DATE,
-            nif INT,
+            nif TEXT,
             created_at TEXT,
             updated_at TEXT
         );

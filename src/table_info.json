@@ -299,13 +299,13 @@
             "Material": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM materials"],
                 "db_name": "mat_code"
             },
             "Supplier": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM suppliers"],
                 "db_name": "sup_code"
             },
             "Quantity": {
@@ -343,13 +343,13 @@
             "Product": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM products"],
                 "db_name": "pro_code"
             },
             "Client": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM clients"],
                 "db_name": "cli_code"
             },
             "Quantity": {
@@ -387,7 +387,7 @@
             "Product": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM products"],
                 "db_name": "pro_code"
             },
             "Quantity": {
@@ -420,13 +420,13 @@
             "Product": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM products"],
                 "db_name": "pro_code"
             },
             "Material": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [],
+                "values": ["query", "SELECT code FROM materials"],
                 "db_name": "mat_code"
             },
             "Quantity": {

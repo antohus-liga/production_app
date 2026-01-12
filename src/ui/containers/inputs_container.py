@@ -19,6 +19,7 @@ class InputsContainer(QWidget):
         self.master = master
 
         self.inputs: list[tuple[QLabel, QLineEdit | QComboBox | QDateEdit]] = []
+        self.relational_combos: list[tuple[str, QComboBox]] = []
         for col_name in self.master.COLUMN_NAMES:
             input_widget = QLineEdit()
             match self.master.column_info[col_name]["input_type"]:
@@ -26,7 +27,7 @@ class InputsContainer(QWidget):
                     input_widget = QLineEdit()
                     match self.master.column_info[col_name]["data_type"]:
                         case "string":
-                            regex = QRegularExpression(r"[A-Za-z\-]+")
+                            regex = QRegularExpression(r"[A-Za-z\-\ ]+")
                             input_widget.setValidator(
                                 QRegularExpressionValidator(regex)
                             )
@@ -36,7 +37,9 @@ class InputsContainer(QWidget):
                                 QRegularExpressionValidator(regex)
                             )
                         case "float":
-                            input_widget.setValidator(QDoubleValidator())
+                            input_widget.setValidator(
+                                QDoubleValidator(bottom=0, decimals=2)
+                            )
                         case "uppercase_only":
                             regex = QRegularExpression(r"[A-Z0-9]+")
                             input_widget.setValidator(
@@ -49,9 +52,10 @@ class InputsContainer(QWidget):
                 case "combo_box":
                     input_widget = QComboBox()
                     values = self.master.column_info[col_name]["values"]
-                    if len(values) < 1:
-                        values = ["test"]
-                    input_widget.addItems(values)
+                    if values[0] == "query":
+                        self.relational_combos.append((col_name, input_widget))
+                    else:
+                        input_widget.addItems(values)
                 case "date_edit":
                     input_widget = QDateEdit()
                     input_widget.setCalendarPopup(True)
@@ -83,6 +87,22 @@ class InputsContainer(QWidget):
                 row += 1
 
         self.setLayout(self.grid)
+
+    def update_combos(self):
+        for col_name, input_widget in self.relational_combos:
+            input_widget.clear()
+
+            query_str = self.master.column_info[col_name]["values"][1]
+            print(self.master.TABLE_NAME)
+            print(query_str)
+            query = QSqlQuery()
+            query.exec(query_str)
+
+            values = []
+            while query.next():
+                values.append(query.value(0))
+
+            input_widget.addItems(values)
 
     def insert_data(self):
         query = self.prepare_insertion_query()

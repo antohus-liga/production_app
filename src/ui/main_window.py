@@ -29,4 +29,22 @@ class MainWindow(QMainWindow):
             self.tabs.addTab(self.display_widgets[i], self.table_names[i])
         self.tabs.addTab(self.prod_mat_widget, self.table_names[-1])
 
+        self.display_widgets[0].data_changed.connect(
+            self.display_widgets[5].inputs.update_combos
+        )
+        self.display_widgets[1].data_changed.connect(
+            self.display_widgets[4].inputs.update_combos
+        )
+        self.display_widgets[2].data_changed.connect(self.update_material_combos)
+        self.display_widgets[3].data_changed.connect(self.update_product_combos)
+
         self.setCentralWidget(self.tabs)
+
+    def update_product_combos(self):
+        self.display_widgets[5].inputs.update_combos()
+        self.display_widgets[6].inputs.update_combos()
+        self.prod_mat_widget.inputs.update_combos()
+
+    def update_material_combos(self):
+        self.display_widgets[4].inputs.update_combos()
+        self.prod_mat_widget.inputs.update_combos()

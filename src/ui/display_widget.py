@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtSql import QSqlQuery
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -15,6 +15,8 @@ from ui.views.table_widget import TableWidget
 
 
 class DisplayWidget(QWidget):
+    data_changed = Signal()
+
     def __init__(self, table_name):
         super().__init__()
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -68,10 +70,12 @@ class DisplayWidget(QWidget):
         self.setLayout(self.master_layout)
 
         self.table.load()
+        self.inputs.update_combos()
 
     def update_views(self):
         self.table.load()
         self.list.load()
+        self.data_changed.emit()
 
     def insert_values(self):
         self.inputs.insert_data()
@@ -114,6 +118,7 @@ class DisplayWidget(QWidget):
 
         self.table.load()
         self.list.load()
+        self.data_changed.emit()
 
     def toggle_view(self):
         if self.switch_to_table.isEnabled():
