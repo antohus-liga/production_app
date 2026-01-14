@@ -98,7 +98,7 @@ class PopupContainer(QWidget):
         col_val = ""
         values = []
         code = ""
-        if self.row:
+        if self.row is not None:
             code = self.master.model().index(self.row, 0).data()
         elif self.item:
             code = self.item.data(Qt.ItemDataRole.UserRole)
