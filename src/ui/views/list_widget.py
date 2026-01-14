@@ -48,5 +48,6 @@ class ListWidget(QListWidget):
         self.popup = PopupContainer(self, item=item)
         self.popup.move(global_pos)
         self.popup.updated.connect(lambda: self.updated.emit())
+        self.master.update_views()
 
         self.popup.show()

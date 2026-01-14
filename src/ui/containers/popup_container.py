@@ -1,10 +1,11 @@
 from PySide6.QtCore import QDate, Qt, Signal
-from PySide6.QtSql import QSqlQuery
+from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import (
     QComboBox,
     QDateEdit,
     QLabel,
     QLineEdit,
+    QMessageBox,
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
@@ -12,6 +13,14 @@ from PySide6.QtWidgets import (
 )
 
 from ui.containers.inputs_container import InputsContainer
+from sql.manager import (
+    calculate_mat_quant,
+    calculate_prod_line_cost,
+    calculate_pro_cost,
+    calculate_pro_quant,
+    calculate_mov_out_price,
+    calculate_mov_in_price,
+)
 
 
 class PopupContainer(QWidget):
@@ -26,15 +35,23 @@ class PopupContainer(QWidget):
         self.COLUMN_NAMES = self.master.COLUMN_NAMES
         self.column_info = self.master.column_info
         self.setWindowFlags(Qt.WindowType.Popup)
+        self.hasNr = False
 
         self.inputs_container = InputsContainer(master)
+        self.inputs_container.update_combos()
+
         self.title = QLabel("Edit")
         self.title.setStyleSheet("font: bold 20px")
 
+        self.start = 0
+        if self.TABLE_NAME in ("movements_in", "movements_out", "production_line"):
+            self.start = 1
+            self.hasNr = True
+
         if row is not None:
-            for i in range(len(self.inputs_container.inputs)):
+            for i in range(self.start, len(self.inputs_container.inputs) + self.start):
                 value = self.master.model().index(row, i).data()
-                input_widget = self.inputs_container.inputs[i][1]
+                input_widget = self.inputs_container.inputs[i - self.start][1]
 
                 if isinstance(input_widget, QLineEdit):
                     input_widget.setText(value)
@@ -52,16 +69,19 @@ class PopupContainer(QWidget):
             id = item.data(Qt.ItemDataRole.UserRole)
             query = QSqlQuery()
 
-            query.prepare(f"SELECT * FROM {self.TABLE_NAME} WHERE code = ?")
+            if self.hasNr:
+                query.prepare(f"SELECT * FROM {self.TABLE_NAME} WHERE nr = ?")
+            else:
+                query.prepare(f"SELECT * FROM {self.TABLE_NAME} WHERE code = ?")
             query.addBindValue(id)
 
             query.exec()
 
             query.first()
             values = [str(query.value(i)) for i in range(query.record().count())]
-            for i in range(len(self.inputs_container.inputs)):
+            for i in range(self.start, len(self.inputs_container.inputs) + self.start):
                 value = values[i]
-                input_widget = self.inputs_container.inputs[i][1]
+                input_widget = self.inputs_container.inputs[i - self.start][1]
 
                 if isinstance(input_widget, QLineEdit):
                     input_widget.setText(value)
@@ -123,11 +143,17 @@ class PopupContainer(QWidget):
             if i < len(self.inputs_container.inputs) - 1:
                 col_val += ", "
 
+        code_or_nr = ""
+        if self.hasNr:
+            code_or_nr = "nr"
+        else:
+            code_or_nr = "code"
+
         query.prepare(
             f"""
             UPDATE {self.master.TABLE_NAME}
             SET updated_at = STRFTIME('%d/%m/%Y', 'now', 'localtime'), {col_val}
-            WHERE code = ?
+            WHERE {code_or_nr} = ?
         """
         )
 
@@ -135,7 +161,40 @@ class PopupContainer(QWidget):
             query.addBindValue(value)
 
         query.addBindValue(code)
-        query.exec()
+        db = QSqlDatabase.database()
+        if not db.transaction():
+            return
 
-        self.updated.emit()
-        self.hide()
+        try:
+            query.exec()
+            match self.TABLE_NAME:
+                case "products":
+                    calculate_mov_out_price()
+                    calculate_prod_line_cost()
+                case "materials":
+                    calculate_pro_cost()
+                    calculate_prod_line_cost()
+                    calculate_mov_in_price()
+                    calculate_mat_quant()
+                case "production_line":
+                    calculate_pro_quant()
+                    calculate_mat_quant()
+                    calculate_prod_line_cost()
+                case "movements_in":
+                    calculate_mat_quant()
+                    calculate_mov_in_price()
+                case "movements_out":
+                    calculate_pro_quant()
+                    calculate_mov_out_price()
+
+            db.commit()
+            self.updated.emit()
+
+        except Exception as e:
+            db.rollback()
+            QMessageBox.critical(
+                None, "Operation failed", f"Insertion aborted: {str(e)}"
+            )
+
+        finally:
+            self.hide()

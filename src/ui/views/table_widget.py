@@ -51,6 +51,10 @@ class TableWidget(QTableWidget):
 
         self.popup = PopupContainer(self, row=row)
         self.popup.move(global_pos)
-        self.popup.updated.connect(lambda: self.updated.emit())
+        self.popup.updated.connect(self.on_update)
 
         self.popup.show()
+
+    def on_update(self):
+        self.master.update_views()
+        self.updated.emit()

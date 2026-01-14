@@ -67,9 +67,9 @@ def initialize_schema() -> None:
             code TEXT PRIMARY KEY NOT NULL,
             name TEXT,
             category TEXT,
-            quantity INTEGER NOT NULL DEFAULT 0,
             base_unit TEXT,
             unit_price FLOAT NOT NULL DEFAULT 0,
+            quantity INTEGER NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT
         );
@@ -84,9 +84,9 @@ def initialize_schema() -> None:
             code TEXT PRIMARY KEY NOT NULL,
             name TEXT,
             category TEXT,
-            quantity INTEGER NOT NULL DEFAULT 0,
             base_unit TEXT,
             unit_price FLOAT NOT NULL DEFAULT 0,
+            quantity INTEGER NOT NULL DEFAULT 0,
             production_cost FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT
@@ -106,7 +106,7 @@ def initialize_schema() -> None:
             created_at TEXT,
             updated_at TEXT,
             FOREIGN KEY(mat_code) REFERENCES materials(code),
-            FOREIGN KEY(sup_code) REFERENCES supliers(code)
+            FOREIGN KEY(sup_code) REFERENCES suppliers(code)
         );
         """
     )
@@ -122,8 +122,8 @@ def initialize_schema() -> None:
             total_price FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT,
-            FOREIGN KEY(pro_code) REFERENCES materials(code),
-            FOREIGN KEY(cli_code) REFERENCES supliers(code)
+            FOREIGN KEY(pro_code) REFERENCES products(code),
+            FOREIGN KEY(cli_code) REFERENCES clients(code)
         );
         """
     )
@@ -152,8 +152,74 @@ def initialize_schema() -> None:
             total_cost FLOAT NOT NULL DEFAULT 0,
             created_at TEXT,
             updated_at TEXT,
-            FOREIGN KEY(pro_code) REFERENCES materials(code)
+            FOREIGN KEY(pro_code) REFERENCES products(code)
         );
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_products_quantity_non_negative
+        BEFORE UPDATE OF quantity ON products
+        FOR EACH ROW
+        WHEN NEW.quantity < 0
+        BEGIN
+            SELECT RAISE(ABORT, 'Product quantity cannot be negative');
+        END;
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_materials_quantity_non_negative
+        BEFORE UPDATE OF quantity ON materials
+        FOR EACH ROW
+        WHEN NEW.quantity < 0
+        BEGIN
+            SELECT RAISE(ABORT, 'Material quantity cannot be negative');
+        END;
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+        ON movements_in(mat_code);
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_product_materials_mat_code
+        ON product_materials(mat_code);
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_product_materials_pro_code
+        ON product_materials(pro_code);
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_production_line_pro_code
+        ON production_line(pro_code);
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+        ON movements_in(mat_code);
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+        ON movements_in(mat_code);
         """
     )
 

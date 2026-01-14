@@ -35,16 +35,41 @@ class MainWindow(QMainWindow):
         self.display_widgets[1].data_changed.connect(
             self.display_widgets[4].inputs.update_combos
         )
-        self.display_widgets[2].data_changed.connect(self.update_material_combos)
-        self.display_widgets[3].data_changed.connect(self.update_product_combos)
-
+        self.display_widgets[2].data_changed.connect(self.on_materials_update)
+        self.display_widgets[3].data_changed.connect(self.on_products_update)
+        self.display_widgets[4].data_changed.connect(self.on_movements_in_update)
+        self.display_widgets[5].data_changed.connect(self.on_movements_out_update)
+        self.display_widgets[6].data_changed.connect(self.on_production_line_update)
+        self.prod_mat_widget.data_changed.connect(self.on_product_materials_update)
         self.setCentralWidget(self.tabs)
 
-    def update_product_combos(self):
+    def on_products_update(self):
         self.display_widgets[5].inputs.update_combos()
         self.display_widgets[6].inputs.update_combos()
         self.prod_mat_widget.inputs.update_combos()
 
-    def update_material_combos(self):
+        self.display_widgets[5].update_views()
+        self.display_widgets[6].update_views()
+
+    def on_materials_update(self):
         self.display_widgets[4].inputs.update_combos()
         self.prod_mat_widget.inputs.update_combos()
+
+        self.display_widgets[3].update_views()
+        self.display_widgets[4].update_views()
+        self.display_widgets[6].update_views()
+
+    def on_movements_in_update(self):
+        self.display_widgets[2].update_views()
+
+    def on_movements_out_update(self):
+        self.display_widgets[3].update_views()
+
+    def on_production_line_update(self):
+        self.display_widgets[2].update_views()
+        self.display_widgets[3].update_views()
+
+    def on_product_materials_update(self):
+        self.display_widgets[2].update_views()
+        self.display_widgets[3].update_views()
+        self.display_widgets[6].update_views()

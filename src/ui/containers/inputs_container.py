@@ -27,7 +27,7 @@ class InputsContainer(QWidget):
                     input_widget = QLineEdit()
                     match self.master.column_info[col_name]["data_type"]:
                         case "string":
-                            regex = QRegularExpression(r"[A-Za-z\-\ ]+")
+                            regex = QRegularExpression(r"[A-Za-z\-\ \á\à\ã\â]+")
                             input_widget.setValidator(
                                 QRegularExpressionValidator(regex)
                             )
@@ -119,8 +119,8 @@ class InputsContainer(QWidget):
             else:
                 QMessageBox.warning(
                     self,
-                    "NULL value not expected",
-                    "Make sure every field is filled",
+                    "Valor vazio",
+                    "Confirme que preencheu todos os campos",
                 )
                 query.clear()
                 return

@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtSql import QSqlQuery
+from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import (
     QMessageBox,
     QWidget,
@@ -9,6 +9,14 @@ from PySide6.QtWidgets import (
 )
 import json
 
+from sql.manager import (
+    calculate_mat_quant,
+    calculate_mov_in_price,
+    calculate_mov_out_price,
+    calculate_pro_cost,
+    calculate_pro_quant,
+    calculate_prod_line_cost,
+)
 from ui.containers.inputs_container import InputsContainer
 from ui.views.list_widget import ListWidget
 from ui.views.table_widget import TableWidget
@@ -30,8 +38,8 @@ class DisplayWidget(QWidget):
         self.list = ListWidget(self)
         self.inputs = InputsContainer(self)
 
-        self.table.updated.connect(self.update_views)
-        self.list.updated.connect(self.update_views)
+        self.table.updated.connect(self.data_changed.emit)
+        self.list.updated.connect(self.data_changed.emit)
 
         self.add_btn = QPushButton("Add")
         self.delete_btn = QPushButton("Delete")
@@ -75,14 +83,51 @@ class DisplayWidget(QWidget):
     def update_views(self):
         self.table.load()
         self.list.load()
-        self.data_changed.emit()
 
     def insert_values(self):
-        self.inputs.insert_data()
-        self.update_views()
+        db = QSqlDatabase.database()
+        if not db.transaction():
+            return
+
+        try:
+            self.inputs.insert_data()
+
+            match self.TABLE_NAME:
+                case "products":
+                    calculate_mov_out_price()
+                    calculate_prod_line_cost()
+                case "materials":
+                    calculate_pro_cost()
+                    calculate_prod_line_cost()
+                    calculate_mov_in_price()
+                    calculate_mat_quant()
+                case "production_line":
+                    calculate_pro_quant()
+                    calculate_mat_quant()
+                    calculate_prod_line_cost()
+                case "movements_in":
+                    calculate_mat_quant()
+                    calculate_mov_in_price()
+                case "movements_out":
+                    calculate_pro_quant()
+                    calculate_mov_out_price()
+
+            db.commit()
+
+        except Exception as e:
+            db.rollback()
+            QMessageBox.critical(
+                None, "Operacao nao concluida", f"Insercao cancelada: {str(e)}"
+            )
+        finally:
+            self.table.load()
+            self.list.load()
+            self.data_changed.emit()
 
     def delete_values(self):
+        db = QSqlDatabase.database()
         query = QSqlQuery()
+
         if self.TABLE_NAME in ("clients", "suppliers", "materials", "products"):
             query.prepare(f"DELETE FROM {self.TABLE_NAME} WHERE code = ?")
         else:
@@ -92,7 +137,9 @@ class DisplayWidget(QWidget):
             selection = self.table.selectionModel()
             if not selection.hasSelection():
                 QMessageBox.warning(
-                    self, "Selection is empty", "Select any row to delete it."
+                    self,
+                    "A seleção está vazia",
+                    "Selecione alguma linha para a eliminar.",
                 )
                 return
 
@@ -101,12 +148,13 @@ class DisplayWidget(QWidget):
                 row = index.row()
                 id = self.table.model().index(row, 0).data()
                 query.bindValue(0, id)
-                query.exec()
         else:
             selection = self.list.selectionModel()
             if not selection.hasSelection():
                 QMessageBox.warning(
-                    self, "Selection is empty", "Select any item to delete it."
+                    self,
+                    "A seleção está vazia",
+                    "Selecione alguma linha para a eliminar.",
                 )
                 return
 
@@ -114,11 +162,44 @@ class DisplayWidget(QWidget):
             for item in items:
                 id = item.data(Qt.ItemDataRole.UserRole)
                 query.bindValue(0, id)
-                query.exec()
 
-        self.table.load()
-        self.list.load()
-        self.data_changed.emit()
+        if not db.transaction():
+            return
+        try:
+            query.exec()
+
+            match self.TABLE_NAME:
+                case "products":
+                    calculate_mov_out_price()
+                    calculate_prod_line_cost()
+                case "materials":
+                    calculate_pro_cost()
+                    calculate_prod_line_cost()
+                    calculate_mov_in_price()
+                    calculate_mat_quant()
+                case "production_line":
+                    calculate_pro_quant()
+                    calculate_mat_quant()
+                    calculate_prod_line_cost()
+                case "movements_in":
+                    calculate_mat_quant()
+                    calculate_mov_in_price()
+                case "movements_out":
+                    calculate_pro_quant()
+                    calculate_mov_out_price()
+
+            db.commit()
+
+        except Exception as e:
+            db.rollback()
+            QMessageBox.critical(
+                None, "Operacao nao concluida", f"Insercao cancelada: {str(e)}"
+            )
+
+        finally:
+            self.table.load()
+            self.list.load()
+            self.data_changed.emit()
 
     def toggle_view(self):
         if self.switch_to_table.isEnabled():

@@ -1,13 +1,26 @@
 import json
-from PySide6.QtCore import Qt
-from PySide6.QtSql import QSqlQuery
-from PySide6.QtWidgets import QHBoxLayout, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtSql import QSqlDatabase, QSqlQuery
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
+from sql.manager import (
+    calculate_mat_quant,
+    calculate_pro_cost,
+    calculate_prod_line_cost,
+)
 from ui.containers.inputs_container import InputsContainer
 from ui.views.tree_widget import TreeWidget
 
 
 class ProdMatWidget(QWidget):
+    data_changed = Signal()
+
     def __init__(self):
         super().__init__()
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -46,11 +59,31 @@ class ProdMatWidget(QWidget):
         return map[self.TABLE_NAME]["columns"]
 
     def insert_values(self):
-        self.inputs.insert_data()
-        self.tree.load()
+        db = QSqlDatabase.database()
+        if not db.transaction():
+            return
+
+        try:
+            self.inputs.insert_data()
+            calculate_pro_cost()
+            calculate_prod_line_cost()
+            calculate_mat_quant()
+
+            db.commit()
+            self.data_changed.emit()
+
+        except Exception as e:
+            db.rollback()
+            QMessageBox.critical(
+                None, "Operacao nao concluida", f"Insercao cancelada: {str(e)}"
+            )
+        finally:
+            self.tree.load()
 
     def delete_values(self):
+        db = QSqlDatabase.database()
         query = QSqlQuery()
+
         items = self.tree.selectedItems()
         for item in items:
             parent = item.parent()
@@ -65,6 +98,21 @@ class ProdMatWidget(QWidget):
                 query.prepare("DELETE FROM product_materials WHERE pro_code = ?")
                 query.addBindValue(item.text(0))
 
+        if not db.transaction():
+            return
+        try:
             query.exec()
+            calculate_pro_cost()
+            calculate_prod_line_cost()
+            calculate_mat_quant()
 
-        self.tree.load()
+            db.commit()
+            self.data_changed.emit()
+
+        except Exception as e:
+            db.rollback()
+            QMessageBox.critical(
+                None, "Operacao nao concluida", f"Insercao cancelada: {str(e)}"
+            )
+        finally:
+            self.tree.load()
