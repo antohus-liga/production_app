@@ -126,7 +126,7 @@ class PopupContainer(QWidget):
         query.prepare(
             f"""
             UPDATE {self.master.TABLE_NAME}
-            SET {col_val}
+            SET updated_at = STRFTIME('%d/%m/%Y', 'now', 'localtime'), {col_val}
             WHERE code = ?
         """
         )
