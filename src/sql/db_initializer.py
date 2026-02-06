@@ -164,7 +164,7 @@ def initialize_schema() -> None:
         FOR EACH ROW
         WHEN NEW.quantity < 0
         BEGIN
-            SELECT RAISE(ABORT, 'Product quantity cannot be negative');
+            SELECT RAISE(ABORT, 'Quantidade de materiais insuficiente.');
         END;
         """
     )
@@ -176,7 +176,7 @@ def initialize_schema() -> None:
         FOR EACH ROW
         WHEN NEW.quantity < 0
         BEGIN
-            SELECT RAISE(ABORT, 'Material quantity cannot be negative');
+            SELECT RAISE(ABORT, 'Quantidade de materiais insuficiente.');
         END;
         """
     )

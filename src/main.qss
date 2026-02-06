@@ -4,11 +4,21 @@
 }
 
 #DataContainer:hover {
-    background-color: #515357;
+    background: #515357;
+    border: 2px dashed #ad7d3d;
 }
 
 QListWidget::item {
+    padding: 3px;
     margin: 5px;
+}
+
+QTableWidget::item:hover {
+    background: #515357;
+}
+
+QTableWidget::item:selected {
+    background: #9ae37d;
 }
 
 #Separator {
