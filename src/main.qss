@@ -18,9 +18,23 @@ QTableWidget::item:hover {
 }
 
 QTableWidget::item:selected {
-    background: #9ae37d;
+    background: rgba(150, 250, 150, 50);
 }
 
 #Separator {
-    background-color: #424242;
+    background-color: white;
+}
+
+QTreeView::item {
+    border: 1px solid white;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+}
+
+QTreeView::item:hover {
+    background: #515357;
+}
+
+QTreeView::item:selected {
+    background: rgba(150, 250, 150, 50);
 }
