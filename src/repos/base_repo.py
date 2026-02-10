@@ -7,6 +7,7 @@ class Base:
         self.db_path = db_path
         self._create_schema()
         self._create_views()
+        self._create_indexes()
 
     @contextmanager
     def get_connection(self):
@@ -73,7 +74,6 @@ class Base:
                     category TEXT,
                     base_unit TEXT,
                     unit_price FLOAT NOT NULL DEFAULT 0,
-                    quantity INTEGER NOT NULL DEFAULT 0,
                     created_at TEXT,
                     updated_at TEXT
                 );
@@ -176,6 +176,24 @@ class Base:
                 """
             )
 
+            cursor.execute(
+                """
+                CREATE VIEW IF NOT EXISTS material_details AS
+                SELECT 
+                    m.*,
+                    (
+                        COALESCE((SELECT SUM(quantity) FROM movements_in WHERE mat_code = m.code), 0) -
+                        COALESCE((
+                            SELECT SUM(pm.quantity * pl.quantity)
+                            FROM product_materials pm
+                            JOIN production_line pl ON pm.pro_code = pl.pro_code
+                            WHERE pm.mat_code = m.code
+                        ), 0)
+                    ) AS quantity
+                FROM materials m;
+                """
+            )
+
     def _create_indexes(self):
         with self.get_connection() as conn:
             cursor = conn.cursor()
@@ -204,19 +222,5 @@ class Base:
                 """
                 CREATE INDEX IF NOT EXISTS idx_production_line_pro_code
                 ON production_line(pro_code);
-                """
-            )
-
-            cursor.execute(
-                """
-                CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
-                ON movements_in(mat_code);
-                """
-            )
-
-            cursor.execute(
-                """
-                CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
-                ON movements_in(mat_code);
                 """
             )
