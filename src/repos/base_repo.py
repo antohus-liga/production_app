@@ -175,3 +175,48 @@ class Base:
                 GROUP BY p.code;
                 """
             )
+
+    def _create_indexes(self):
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+                ON movements_in(mat_code);
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_product_materials_mat_code
+                ON product_materials(mat_code);
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_product_materials_pro_code
+                ON product_materials(pro_code);
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_production_line_pro_code
+                ON production_line(pro_code);
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+                ON movements_in(mat_code);
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
+                ON movements_in(mat_code);
+                """
+            )
