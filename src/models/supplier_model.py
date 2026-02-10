@@ -5,7 +5,7 @@ import datetime
 from models.enums import SupplierType
 
 
-@dataclass
+@dataclass(frozen=True)
 class Supplier:
     code: str
     first_name: str

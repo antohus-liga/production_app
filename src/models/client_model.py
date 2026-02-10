@@ -5,7 +5,7 @@ import datetime
 from models.enums import ClientType
 
 
-@dataclass
+@dataclass(frozen=True)
 class Client:
     code: str
     first_name: str
