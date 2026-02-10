@@ -163,18 +163,15 @@ class Base:
             cursor.execute(
                 """
                 CREATE VIEW IF NOT EXISTS product_details AS
-                SELECT
+                SELECT 
                     p.*,
-                    (
-                        COALESCE((SELECT SUM(quantity) FROM production_line WHERE pro_code = p.code), 0) -
-                        COALESCE((SELECT SUM(quantity) FROM movements_out WHERE pro_code = p.code), 0)
-                    ) AS quantity,
-                    (
-                        SELECT COALESCE(SUM(pm.quantity * m.unit_price), 0)
-                        FROM product_materials pm
-                        JOIN materials m ON pm.mat_code = m.code
-                        WHERE pm.pro_code = p.code
-                    ) AS production_cost
-                FROM products p;
+                    COALESCE(SUM(pl.quantity), 0) - COALESCE(SUM(mo.quantity), 0) AS quantity,
+                    COALESCE(SUM(pm.quantity * m.unit_price), 0) AS production_cost
+                FROM products p
+                LEFT JOIN production_line pl ON p.code = pl.pro_code
+                LEFT JOIN movements_out mo ON p.code = mo.pro_code
+                LEFT JOIN product_materials pm ON p.code = pm.pro_code
+                LEFT JOIN materials m ON pm.mat_code = m.code
+                GROUP BY p.code;
                 """
             )
