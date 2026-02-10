@@ -47,3 +47,17 @@ class MaterialCategory(Enum):
     CHEMICAL_MATERIAL = "Material Químico"
     ELECTRONIC_MATERIAL = "Material Eletrónico"
     MECHANICAL_MATERIAL = "Material Mecânico"
+
+
+class BaseUnit(Enum):
+    METER = "m"
+    CENTIMETER = "cm"
+    MILLIMETER = "mm"
+    KILOGRAM = "kg"
+    GRAM = "g"
+    MILLIGRAM = "mg"
+    LITER = "l"
+    MILLILITER = "ml"
+    CUBIC_METER = "m³"
+    PIECE = "pcs"
+    AREA = "m²"
